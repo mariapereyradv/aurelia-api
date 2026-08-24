@@ -7,21 +7,22 @@ const {
   actualizarVino,
   eliminarVino,
   buscarPorCepa,
-  agregarMaridajeLibro
+  obtenerMaridajesDeVino,
+  obtenerEscritoresQueRecomiendan
 } = require('../controllers/vinoController');
+const { protectar, esAdmin } = require('../middleware/authMiddleware');
 
-// Rutas CRUD básicas
 router.route('/')
-  .post(crearVino)
-  .get(obtenerVinos);
+  .post(protectar, esAdmin, crearVino)
+  .get(protectar, obtenerVinos);
 
 router.route('/:id')
-  .get(obtenerVino)
-  .put(actualizarVino)
-  .delete(eliminarVino);
+  .get(protectar, obtenerVino)
+  .put(protectar, esAdmin, actualizarVino)
+  .delete(protectar, esAdmin, eliminarVino);
 
-// Rutas específicas
-router.get('/cepa/:cepa', buscarPorCepa);
-router.post('/:id/maridaje/libro', agregarMaridajeLibro);
+router.get('/cepa/:cepa', protectar, buscarPorCepa);
+router.get('/:id/maridajes', protectar, obtenerMaridajesDeVino);
+router.get('/:id/escritores-recomendantes', protectar, obtenerEscritoresQueRecomiendan);
 
 module.exports = router;

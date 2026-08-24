@@ -3,17 +3,24 @@ const router = express.Router();
 const {
   crearLibro,
   obtenerLibros,
+  obtenerLibro,
+  actualizarLibro,
+  eliminarLibro,
   buscarPorGenero,
-  agregarMaridajeVino
+  obtenerMaridajesDeLibro
 } = require('../controllers/libroController');
+const { protectar, esAdmin } = require('../middleware/authMiddleware');
 
-// Rutas CRUD básicas
 router.route('/')
-  .post(crearLibro)
-  .get(obtenerLibros);
+  .post(protectar, esAdmin, crearLibro)
+  .get(protectar, obtenerLibros);
 
-// Rutas específicas
-router.get('/genero/:genero', buscarPorGenero);
-router.post('/:id/maridaje/vino', agregarMaridajeVino);
+router.route('/:id')
+  .get(protectar, obtenerLibro)
+  .put(protectar, esAdmin, actualizarLibro)
+  .delete(protectar, esAdmin, eliminarLibro);
+
+router.get('/genero/:genero', protectar, buscarPorGenero);
+router.get('/:id/maridajes', protectar, obtenerMaridajesDeLibro);
 
 module.exports = router;
