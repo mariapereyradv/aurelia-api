@@ -1,46 +1,31 @@
+// ==========================
+// MODELO DE LIBRO
+// ==========================
+// El maridaje con vinos vive en la colección Maridaje (models/maridaje.js),
+// no acá: evita tener la misma relación guardada en dos lugares.
+
 const mongoose = require('mongoose');
 
 const libroSchema = new mongoose.Schema({
   titulo: {
     type: String,
-    required: true,
-    trim: true
+    required: [true, 'El título es obligatorio']
   },
   autor: {
     type: String,
-    required: true,
-    trim: true
+    required: [true, 'El autor es obligatorio']
   },
   genero: {
     type: String,
-    required: true,
-    enum: ['Romance', 'Misterio', 'Acción', 'Fantasía', 'Ciencia Ficción', 'Terror', 'Histórica', 'Biografía', 'Poesía']
+    required: [true, 'El género es obligatorio']
   },
-  añoPublicacion: {
-    type: Number,
-    min: 1000,
-    max: new Date().getFullYear()
+  anioPublicacion: {
+    type: Number
   },
-  sinopsis: {
-    type: String,
-    trim: true
-  },
-  maridajeVinos: [{
-    cepa: {
-      type: String,
-      enum: ['Malbec', 'Cabernet Sauvignon', 'Merlot', 'Syrah', 'Chardonnay', 'Sauvignon Blanc', 'Pinot Noir', 'Bonarda', 'Tempranillo', 'Carmenere']
-    },
-    vinoId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Vino'
-    }
-  }],
   escritorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Escritor'
   }
-}, {
-  timestamps: true
 });
 
 module.exports = mongoose.model('Libro', libroSchema);
