@@ -10,10 +10,14 @@ require("dotenv").config();
 // con un mensaje claro, a que arranque "a medias" y falle más tarde
 // en medio de una petición real (por ejemplo, al firmar un JWT sin secreto).
 const variablesRequeridas = ["MONGODB_URI", "JWT_SECRET"];
-const faltantes = variablesRequeridas.filter((variable) => !process.env[variable]);
+const faltantes = variablesRequeridas.filter(
+  (variable) => !process.env[variable],
+);
 
 if (faltantes.length > 0) {
-  console.error(`❌ Faltan variables de entorno obligatorias: ${faltantes.join(", ")}`);
+  console.error(
+    `❌ Faltan variables de entorno obligatorias: ${faltantes.join(", ")}`,
+  );
   console.error("   Revisá el archivo .env antes de iniciar el servidor.");
   process.exit(1);
 }
@@ -62,7 +66,9 @@ mongoose
     // Middleware de errores (siempre al final de todo)
     app.use((err, req, res, next) => {
       console.error(err);
-      res.status(500).json({ success: false, mensaje: "Error interno del servidor" });
+      res
+        .status(500)
+        .json({ success: false, mensaje: "Error interno del servidor" });
     });
 
     app.listen(PORT, () => {
